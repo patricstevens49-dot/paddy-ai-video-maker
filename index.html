@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17132d">
+<title>Paddy AI Video Maker</title>
+<style>
+:root{color-scheme:dark;--bg:#17132d;--card:#241f40;--line:#40375f;--purple:#a18aff;--white:#fff;--muted:#c7c0df}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#292052,#17132d 55%);color:var(--white);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:620px;margin:auto;padding:22px 16px calc(28px + env(safe-area-inset-bottom))}
+header{text-align:center;padding:14px 6px 20px}
+.logo{font-size:42px}h1{font-size:26px;margin:7px 0}.muted{color:var(--muted);font-size:14px;line-height:1.5}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:13px 0}
+label{display:block;font-weight:700;margin-bottom:9px}
+textarea{width:100%;min-height:142px;resize:vertical;background:#151229;color:white;border:1px solid #514875;border-radius:13px;padding:13px;font:15px/1.5 inherit;outline:none}
+textarea:focus{border-color:var(--purple)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.preset{border:1px solid #65588e;background:#30294e;color:white;border-radius:999px;padding:9px 12px;font-size:13px}
+button.main{width:100%;border:0;border-radius:14px;padding:16px;background:var(--purple);color:#17102e;font-weight:800;font-size:16px;margin-top:14px}
+button:active{transform:scale(.99)}
+.steps{display:grid;gap:12px}.step{display:flex;gap:12px;align-items:flex-start}.num{background:#42366c;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;flex:none;font-weight:800}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+a{color:#d5caff}
+.status{min-height:20px;margin-top:9px;font-size:13px;color:#d5caff;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="logo">🎬</div>
+<h1>Paddy AI Video Maker</h1>
+<div class="muted">Make a video from your idea — right on your iPhone.</div>
+</header>
+
+<section class="card">
+<label for="prompt">1. What video do you want?</label>
+<textarea id="prompt" placeholder="Example: A cute baby shark dancing with colourful fish in a magical underwater world..."></textarea>
+<div class="presets" aria-label="Example prompts">
+<button class="preset" data-prompt="A cute baby shark dances with colourful fish in a bright magical underwater world. Cheerful 3D cartoon, fun movement, bubbles, family friendly.">🦈 Baby shark</button>
+<button class="preset" data-prompt="A friendly little dinosaur explores a colourful jungle, meets butterflies and dances. Bright cheerful 3D cartoon animation, family friendly.">🦕 Dinosaur</button>
+<button class="preset" data-prompt="A happy teddy bear sings and dances in a colourful toy room with balloons and bouncing stars. Cute 3D cartoon animation, family friendly.">🧸 Teddy bear</button>
+<button class="preset" data-prompt="A magical rainbow train travels through a candy-coloured world with smiling animals waving. Cheerful 3D cartoon animation, family friendly.">🚂 Rainbow train</button>
+</div>
+<button class="main" id="go">2. Make my video →</button>
+<div class="status" id="status" aria-live="polite"></div>
+</section>
+
+<section class="card">
+<strong>3. Finish your video</strong>
+<div class="steps" style="margin-top:14px">
+<div class="step"><span class="num">1</span><div><b>Copy your idea</b><div class="small">Tap the purple button. Your prompt is copied automatically.</div></div></div>
+<div class="step"><span class="num">2</span><div><b>Open the free video maker</b><div class="small">Paste your idea into the prompt box and choose Generate.</div></div></div>
+<div class="step"><span class="num">3</span><div><b>Save your video</b><div class="small">When it finishes, use the generator's download button. Choose portrait / 9:16 for Shorts if available.</div></div></div>
+</div>
+</section>
+
+<section class="card">
+<strong>Free to use</strong>
+<p class="small">This app has no subscription or charge. Video generation is provided by a separate public AI demo using shared computing resources. It may have a queue, usage limits or downtime, so unlimited free generation cannot be promised. Your prompt is sent to that service when you use it.</p>
+<a href="https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html" target="_blank" rel="noopener">Open video maker directly ↗</a>
+</section>
+</main>
+<script>
+const promptBox=document.getElementById('prompt');
+const status=document.getElementById('status');
+document.querySelectorAll('.preset').forEach(button=>{
+ button.addEventListener('click',()=>{promptBox.value=button.dataset.prompt;status.textContent='Example added — tap “Make my video”.';});
+});
+document.getElementById('go').addEventListener('click',async()=>{
+ const prompt=promptBox.value.trim();
+ if(!prompt){status.textContent='Write an idea or choose an example first.';promptBox.focus();return;}
+ try{
+  await navigator.clipboard.writeText(prompt);
+  status.textContent='Copied! The free video maker is opening — paste your idea there.';
+ }catch(e){
+  promptBox.select();
+  status.textContent='Your idea is selected. Copy it, then paste it into the video maker.';
+ }
+ window.open('https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html','_blank','noopener');
+});
+</script>
+</body>
+</html>
